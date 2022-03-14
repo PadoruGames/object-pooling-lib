@@ -14,6 +14,8 @@ namespace Padoru.ObjectPooling
 
         public void Init()
         {
+            OnBeforeInitialization();
+
             poolObjects = new List<T>();
             usedObjects = new List<T>();
             poolOperator = new PoolOperator<T>();
@@ -23,8 +25,6 @@ namespace Padoru.ObjectPooling
                 var newObj = CreateObject();
                 poolObjects.Add(newObj);
             }
-
-            OnInitialization();
         }
 
         public virtual T GetObject()
@@ -51,7 +51,7 @@ namespace Padoru.ObjectPooling
 
         protected abstract T CreateObject();
 
-        protected virtual void OnInitialization() { }
+        protected virtual void OnBeforeInitialization() { }
 
         protected virtual void OnGetObject(T obj) { }
 

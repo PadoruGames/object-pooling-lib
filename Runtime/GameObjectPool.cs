@@ -9,7 +9,7 @@ namespace Padoru.ObjectPooling
 
         [SerializeField] private GameObject prefab;
 
-        protected override void OnInitialization()
+        protected override void OnBeforeInitialization()
         {
             if(poolParent == null)
             {
