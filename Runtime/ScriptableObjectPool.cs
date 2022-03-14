@@ -8,38 +8,50 @@ namespace Padoru.ObjectPooling
         [SerializeField] private int startAmount;
         [SerializeField] private int maxCapacity;
 
-        private List<T> poolObjects = new List<T>();
-        private List<T> usedObjects = new List<T>();
-        private PoolOperator<T> poolOperator = new PoolOperator<T>();
+        private List<T> poolObjects;
+        private List<T> usedObjects;
+        private PoolOperator<T> poolOperator;
 
-        protected virtual void Awake()
+        public void Init()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            poolObjects = new List<T>();
+            usedObjects = new List<T>();
+            poolOperator = new PoolOperator<T>();
 
             for (int i = 0; i < startAmount; i++)
             {
                 var newObj = CreateObject();
                 poolObjects.Add(newObj);
             }
+
+            OnInitialization();
         }
 
         public virtual T GetObject()
         {
             var obj = poolOperator.GetObject(name, poolObjects, usedObjects, maxCapacity, CreateObject);
-            OnGetObject(obj);
+
+            if(obj != null)
+            {
+                OnGetObject(obj);
+            }
+
             return obj;
         }
 
         public virtual void ReturnObject(T obj)
         {
-            OnReturnObject(obj);
+            if (obj != null)
+            {
+                OnReturnObject(obj);
+            }
+
             poolOperator.ReturnObject(obj, name, poolObjects, usedObjects);
         }
 
         protected abstract T CreateObject();
+
+        protected virtual void OnInitialization() { }
 
         protected virtual void OnGetObject(T obj) { }
 

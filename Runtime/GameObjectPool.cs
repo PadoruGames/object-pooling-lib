@@ -9,18 +9,11 @@ namespace Padoru.ObjectPooling
 
         [SerializeField] private GameObject prefab;
 
-        protected override void Awake()
+        protected override void OnInitialization()
         {
-            base.Awake();
-
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
             if(poolParent == null)
             {
-                var go = new GameObject("PoolsParent");
+                var go = new GameObject("PoolParent");
                 poolParent = go.transform;
             }
         }
@@ -33,16 +26,16 @@ namespace Padoru.ObjectPooling
             return go;
         }
 
-        protected override void OnGetObject(GameObject obj)
+        protected override void OnGetObject(GameObject go)
         {
-            obj.transform.SetParent(null);
-            obj.SetActive(true);
+            go.transform.SetParent(null);
+            go.SetActive(true);
         }
 
-        protected override void OnReturnObject(GameObject obj)
+        protected override void OnReturnObject(GameObject go)
         {
-            obj.transform.SetParent(poolParent);
-            obj.SetActive(false);
+            go.transform.SetParent(poolParent);
+            go.SetActive(false);
         }
     }
 }
