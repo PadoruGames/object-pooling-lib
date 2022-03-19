@@ -4,30 +4,40 @@ using System.Collections.Generic;
 
 namespace Padoru.ObjectPooling
 {
-    internal class PoolOperator<T> where T : class
+    public class PoolOperator<T> where T : class
     {
-        internal T GetObject(string poolName, List<T> poolObjects, List<T> usedObjects, int maxPoolCapacity, Func<T> createObjectCallback)
+        public T GetObject(string poolName, List<T> poolObjects, List<T> usedObjects, int maxPoolCapacity, Func<T> createObjectCallback)
         {
+            if(poolObjects == null || usedObjects == null)
+            {
+                throw new Exception($"PoolObjects or UsedObjects list null {poolName}.");
+            }
+
             if (poolObjects.Count <= 0)
             {
                 if (HasCapacity(poolObjects, usedObjects, maxPoolCapacity))
                 {
-                    Debug.LogWarning($"Added new object to pool {poolName}");
+                    Debug.LogWarning($"Added new object to pool {poolName}.");
+
                     var newObj = createObjectCallback?.Invoke();
+                    if(newObj == null)
+                    {
+                        throw new Exception($"CreateObjectCallback method is returning null in pool {poolName}.");
+                    }
+
                     poolObjects.Add(newObj);
                 }
                 else
                 {
-                    Debug.LogError($"Pool capacity reach {poolName}");
-                    return null;
+                    throw new Exception($"Pool capacity reach {poolName}.");
                 }
             }
 
             var obj = poolObjects[0];
             if (obj == null)
             {
-                Debug.LogError($"Null object in pool {poolName}");
-                return null;
+                poolObjects.RemoveAt(0);
+                throw new Exception($"Null object in pool {poolName}. Object removed from pool");
             }
 
             poolObjects.RemoveAt(0);
@@ -36,8 +46,18 @@ namespace Padoru.ObjectPooling
             return obj;
         }
 
-        internal void ReturnObject(T obj, string poolName, List<T> poolObjects, List<T> usedObjects)
+        public void ReturnObject(T obj, string poolName, List<T> poolObjects, List<T> usedObjects)
         {
+            if (poolObjects == null || usedObjects == null)
+            {
+                throw new Exception($"PoolObjects or UsedObjects list null {poolName}.");
+            }
+
+            if (obj == null)
+            {
+                throw new Exception($"Cannot return a null object to pool {poolName}");
+            }
+
             if (poolObjects.Contains(obj))
             {
                 return;
@@ -45,8 +65,7 @@ namespace Padoru.ObjectPooling
 
             if (!usedObjects.Contains(obj))
             {
-                Debug.LogError($"The given object {obj} does not belong to this pool {poolName}");
-                return;
+                throw new Exception($"The given object {obj} does not belong to this pool {poolName}");
             }
 
             usedObjects.Remove(obj);
