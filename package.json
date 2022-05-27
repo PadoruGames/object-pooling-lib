@@ -6,6 +6,6 @@
   "unity": "2020.3"
   "dependencies":
   {
-	"com.padoru.core-lib": "https://github.com/PadoruGames/core-lib.git"
+	"com.padoru.core-lib": "0.1.1"
   }
 }
