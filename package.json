@@ -4,8 +4,4 @@
   "displayName": "Padoru Object Pooling",
   "description": "A library to implement object pooling in Unity games",
   "unity": "2020.3"
-  "dependencies":
-  {
-	"com.padoru.core-lib": "0.1.1"
-  }
 }
