@@ -1,7 +1,11 @@
 {
   "name": "com.padoru.object-pooling-lib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Padoru Object Pooling",
   "description": "A library to implement object pooling in Unity games",
-  "unity": "2020.3"
+  "unity": "2020.3",
+  "author": {
+    "name": "Padoru Games",
+    "url": "https://github.com/PadoruGames/object-pooling-lib"
+  }
 }
